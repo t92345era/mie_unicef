@@ -1,0 +1,37 @@
+<mxfile host="65bd71144e">
+    <diagram id="ctt3OGgy0E5dBA75Kdlx" name="ページ1">
+        <mxGraphModel dx="538" dy="496" grid="1" gridSize="10" guides="0" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="3" value="小説作成" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="120" y="110" width="110" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="シナリオ構成&lt;br&gt;作成" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="120" y="360" width="110" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="テーマ" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="120" y="190" width="110" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="登場人物" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="120" y="280" width="110" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="本文" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="120" y="440" width="110" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="タイトル" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="240" y="120" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" value="あらすじなど" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="240" y="210" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="17" value="あらすじなど" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="250" y="380" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="19" value="本文プレビュー" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="120" y="520" width="110" height="50" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
