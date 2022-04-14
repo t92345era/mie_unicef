@@ -34,7 +34,7 @@ export const fetchTodoEpic = (action$: any) => action$.pipe(
   mergeMap(action =>
     ajax.getJSON(`https://jsonplaceholder.typicode.com/posts`).pipe(
       map(rs => {
-        console.log(rs);
+        //console.log(rs);
         return rs;
       }),
       map(response => ({ type: FETCH_TODO_FULFILLED, payload: response }))
