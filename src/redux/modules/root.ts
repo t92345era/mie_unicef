@@ -4,10 +4,12 @@ import todo, { fetchTodoEpic, TodoState } from './todo';
 import user, { 
   fetchUserEpic, 
   updateUserEpic,
+  deleteUserEpic,
   receiveListEpic, 
   sendListEpic, 
   mailHisOneEpic,
-  UserState } from './user';
+  UserState, 
+  fetchAllUserEpic} from './user';
 import app, { AppState } from './app';
 
 export interface RootState {
@@ -20,6 +22,7 @@ export const rootEpic = combineEpics(
   fetchTodoEpic,
   updateUserEpic,
   fetchUserEpic,
+  fetchAllUserEpic,
   receiveListEpic,
   mailHisOneEpic,
   sendListEpic,

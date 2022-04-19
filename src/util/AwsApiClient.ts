@@ -10,14 +10,15 @@ export class AwsApiClient {
 
   /**
    * ユーザー一覧の取得
+   * @param addAll 全員を追加するかどうか
    * @param deliOnly メール配信者だけを取得するか
    * @returns レスポンス
    */
-  static getUsers(deliOnly: boolean, apikey: string): Observable<AjaxResponse<any>> {
+  static getUsers(addAll: boolean, deliOnly: boolean, apikey: string): Observable<AjaxResponse<any>> {
     return ajax.post(`${AwsApiClient.URL_BASE}/users`,
       {
-        "deliOnly": true,
-        "addAll": true
+        "deliOnly": deliOnly,
+        "addAll": addAll
       },
       {
         'Content-Type': 'application/json',
@@ -30,10 +31,28 @@ export class AwsApiClient {
    * @param deliOnly メール配信者だけを取得するか
    * @returns レスポンス
    */
-   static insUpUser(user: User, apikey: string): Observable<AjaxResponse<any>> {
+  static insUpUser(user: User, apikey: string): Observable<AjaxResponse<any>> {
     return ajax.post(`${AwsApiClient.URL_BASE}/users`,
       {
         "updateUser": user
+      },
+      {
+        'Content-Type': 'application/json',
+        'x-api-key': apikey,
+      })
+  }
+
+
+  /**
+   * ユーザーの削除
+   * @param user 削除するユーザー
+   * @param apikey APIKEY
+   * @returns レスポンス
+   */
+   static deleteUser(user: User, apikey: string): Observable<AjaxResponse<any>> {
+    return ajax.post(`${AwsApiClient.URL_BASE}/users`,
+      {
+        "deleteUser": user
       },
       {
         'Content-Type': 'application/json',
@@ -129,17 +148,17 @@ export class AwsApiClient {
      */
   static authCheck(apkey: string): Observable<boolean> {
     //console.log("apkey", apkey);
-    return ajax.post(`${AwsApiClient.URL_BASE}/mail/hist`, {srKbn: "S", ems: 9999},
+    return ajax.post(`${AwsApiClient.URL_BASE}/mail/hist`, { srKbn: "S", ems: 9999 },
       {
         'Content-Type': 'application/json',
         'x-api-key': apkey,
       })
-    .pipe(
-      map(rs => rs.status == 200),
-      catchError(err => {
-        return of(false);
-      })
-    );
+      .pipe(
+        map(rs => rs.status == 200),
+        catchError(err => {
+          return of(false);
+        })
+      );
   }
 
   /**

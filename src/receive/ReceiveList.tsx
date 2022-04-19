@@ -1,4 +1,4 @@
-import { Avatar, Divider, List, ListItem, ListItemAvatar, ListItemButton, ListItemSecondaryAction, ListItemText } from '@mui/material';
+import { Avatar, Box, Divider, List, ListItem, ListItemAvatar, ListItemButton, ListItemSecondaryAction, ListItemText } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import MessageDialog from '../dialog/MessageDialog';
@@ -11,6 +11,7 @@ import { Message, RECEIVE_LIST } from '../redux/modules/user';
  */
 function ReceiveList() {
 
+  const loading = useSelector((state: RootState) => state.user.loading);
   const receiveList = useSelector((state: RootState) => state.user.receiveList);
   const [open, setOpen] = React.useState(false);
   const [selectedMessage, setSelectedMessage] = React.useState<Message | null>(null);
@@ -67,6 +68,7 @@ function ReceiveList() {
 
   return (
     <div>
+      {loading && (<Box sx={{m:2}}>読み込み中...</Box>)}
       <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
         {receiveList.map((item, index) => (
           <React.Fragment key={index}>

@@ -1,15 +1,13 @@
+import AddIcon from '@mui/icons-material/Add';
+import { Alert, AlertColor, Box, Fab, Snackbar, Stack, TextField } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import EmailIcon from '@mui/icons-material/Email';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Accordion, AccordionDetails, AccordionSummary, Avatar, Box, Divider, Fab, FormControlLabel, Grid, List, ListItem, ListItemAvatar, ListItemButton, ListItemSecondaryAction, ListItemText, Stack, Switch, TextField, Typography } from '@mui/material';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { APP_PAGE_TILE } from '../redux/modules/app';
 import { RootState } from '../redux/modules/root';
-import { FETCH_USERS, User } from '../redux/modules/user';
+import { FETCH_ALL_USERS, FETCH_ALL_USERS_FULFILLED, User } from '../redux/modules/user';
 import UserAccodion from './UserAccodion';
-import AddIcon from '@mui/icons-material/Add';
 
 // 共通テキストボックススタイル
 const CustomTextField = styled(TextField)({
@@ -21,26 +19,25 @@ const CustomTextField = styled(TextField)({
  */
 function UserList() {
 
-  const users = useSelector((state: RootState) => state.user.users);
+  const users = useSelector((state: RootState) => state.user.allUsers);
+  const loading = useSelector((state: RootState) => state.user.loading);
   //const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const dispatch = useDispatch();
   const location = useLocation();
   const [addUser, setAddUser] = useState<User | null>(null);
 
+  const [openSnackbar, setOpenSnackbar] = useState({
+    open: false,
+    severity: "success" as AlertColor,
+    message: ""
+  });
+
   // 初期表示
   useEffect(() => {
     dispatch(({ type: APP_PAGE_TILE, payload: "ユーザーメンテ" }));
-    dispatch(({ type: FETCH_USERS }));
+    dispatch(({ type: FETCH_ALL_USERS_FULFILLED , payload: []}));
+    dispatch(({ type: FETCH_ALL_USERS }));
   }, []);
-
-  /**
-   * リストのアイコンマーク文字取得
-   */
-  function stringAvatar(name: string) {
-    return {
-      children: `${name[0]}`,
-    };
-  }
 
   /**
    * ユーザー追加の＋ボタンクリック
@@ -50,9 +47,44 @@ function UserList() {
       id: "", MailAddress: "", MailDeli: false, UserId: "", UserName: "", UserSeq: -1
     });
     setTimeout(() => {
-      document.body.scrollIntoView({behavior :"smooth", block: "end"});  
+      document.body.scrollIntoView({ behavior: "smooth", block: "end" });
     }, 10);
-    
+  }
+
+  /**
+   * ユーザー編集アコーディオンのキャンセル
+   * @param item ユーザー情報
+   */
+  function onCancelEdit(item: User) {
+    if (!item.id) setAddUser(null);
+  }
+
+  /**
+   * ユーザー更新後のアクション
+   * @param item ユーザー情報
+   */
+  function onUserUpdate(item: User) {
+    setAddUser(null);
+
+    setOpenSnackbar({
+      open: true,
+      severity: "success",
+      message: "保存完了"
+    });
+  }
+
+  /**
+   * ユーザー削除後のアクション
+   * @param item ユーザー情報
+   */
+   function onUserDelete(item: User) {
+    setAddUser(null);
+
+    setOpenSnackbar({
+      open: true,
+      severity: "success",
+      message: "削除しました"
+    });
   }
 
   /**
@@ -63,117 +95,47 @@ function UserList() {
     // setOpen(true);
   }
 
-  /**
-   * リストアイテムの作成
-   */
-  function createList(item: User): JSX.Element {
-    return (
-      <ListItem alignItems="flex-start" onClick={() => onClickList(item)}>
-        <ListItemButton>
-          <ListItemAvatar>
-            <Avatar {...stringAvatar(item.UserName)} />
-          </ListItemAvatar>
-          <ListItemText
-            primary={item.UserName}
-            secondary={
-              <Box>
-                <Stack>
-                  <Stack direction="row" alignItems="center">
-                    <EmailIcon />
-                    <span>{item.MailDeli ? "配信あり" : "対象外"}</span>
-                  </Stack>
-                  <Fragment>{item.MailAddress}</Fragment>
-                </Stack>
-              </Box>
-            }
-          />
-          <ListItemSecondaryAction>
-            <span>A</span>
-          </ListItemSecondaryAction>
-        </ListItemButton>
-      </ListItem>
-    );
-  }
-
-  function careteAccordion(item: User): JSX.Element {
-
-    return (
-      <Accordion TransitionProps={{ unmountOnExit: true }}>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content">
-          <Grid container spacing={2}>
-            <Grid item xs="auto">
-              <Avatar {...stringAvatar(item.UserName)} />
-            </Grid>
-            <Grid item xs>
-              <Box>
-                <Stack>
-                  <Typography sx={{ mb: 1 }} variant="subtitle1">{item.UserName}</Typography>
-                  <Stack direction="row" alignItems="center">
-                    <EmailIcon color="action" />
-                    <span>{item.MailDeli ? "配信あり" : "対象外"}</span>
-                  </Stack>
-                  <Fragment>{item.MailAddress}</Fragment>
-                </Stack>
-              </Box>
-            </Grid>
-          </Grid>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Box>
-            <Stack spacing={1}>
-              <CustomTextField
-                variant="filled"
-                label="氏名"
-                value={item.UserName}
-              />
-              <CustomTextField
-                variant="filled"
-                label="メールアドレス"
-                value={item.MailAddress}
-              />
-              <FormControlLabel
-                control={
-                  <Switch name="gilad" />
-                }
-                label="Gilad Gray"
-              />
-            </Stack>
-          </Box>
-        </AccordionDetails>
-      </Accordion>
-    )
-  }
-
   return (
     <div>
+      {loading && (<Box sx={{m:2}}>読み込み中...</Box>)}
       <Stack sx={{ my: 1 }}>
         {users.map((item, index) => (
           <React.Fragment key={index}>
-            <UserAccodion user={item} />
+            <UserAccodion
+              user={item}
+              onCancel={onCancelEdit}
+              onUpdate={onUserUpdate}
+              onRemove={onUserDelete} />
           </React.Fragment>
         ))}
         {addUser != null && (
-            <UserAccodion user={addUser} newData={true} />
+          <UserAccodion
+            user={addUser}
+            newData={true}
+            onUpdate={onUserUpdate}
+            onCancel={onCancelEdit} />
         )}
       </Stack>
-      <Box sx={{height: "70px"}}></Box>
-      {/* <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-        {users.map((item, index) => (
-          <React.Fragment key={index}>
-            {createList(item)}
-            <Divider variant="inset" component="li" />
-          </React.Fragment>
-        ))}
-      </List> */}
-      <Fab 
-        color="primary" 
+      <Box sx={{ height: "90px" }}></Box>
+      <Fab
+        color="primary"
         sx={{ position: 'fixed', bottom: 16, right: 16 }}
         aria-label="add"
         onClick={handleAddUser}>
         <AddIcon />
       </Fab>
+
+      <Snackbar
+        anchorOrigin={{vertical: 'top', horizontal: 'center'}}
+        open={openSnackbar.open}
+        autoHideDuration={6000}
+        onClose={() => setOpenSnackbar({...openSnackbar, open: false})}>
+        <Alert 
+          onClose={() => setOpenSnackbar({...openSnackbar, open: false})} 
+          severity={openSnackbar.severity} sx={{ width: '100%' }}>
+          {openSnackbar.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

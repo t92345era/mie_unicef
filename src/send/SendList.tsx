@@ -1,4 +1,4 @@
-import { ListItemButton, ListItemSecondaryAction } from '@mui/material';
+import { Box, ListItemButton, ListItemSecondaryAction } from '@mui/material';
 import { Avatar, Divider, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
@@ -13,6 +13,7 @@ import { Message, User, SEND_LIST } from '../redux/modules/user';
  */
 function SendList() {
 
+  const loading = useSelector((state: RootState) => state.user.loading);
   const sendList = useSelector((state: RootState) => state.user.sendList);
   const [open, setOpen] = React.useState(false);
   const [selectedMessage, setSelectedMessage] = React.useState<Message | null>(null);
@@ -87,6 +88,7 @@ function SendList() {
 
   return (
     <div>
+      {loading && (<Box sx={{m:2}}>読み込み中...</Box>)}
       <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
         {sendList.map((item, index) => (
           <React.Fragment key={index}>
